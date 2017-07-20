@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -222,6 +223,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    public void updateMapView(List<LatLng> positions){
+        System.out.println("dshfbhdsbfkj"+positions.size());
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng position : positions) {
+            builder.include(position);
+        }
+
+        LatLngBounds bounds = builder.build();
+
+        int padding = 25; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+        mMap.animateCamera(cu);
+    }
+
     private String getDirectionsUrl(String source, String destination) {
 
         // Origin of route
@@ -331,6 +347,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             int timeCovered = 0;
             List<LatLng> toBeAdded = new ArrayList<LatLng>();
             List<LatLng> tmp = decode(steps.get(0).polyline.points);
+            List<LatLng> positions = new ArrayList<LatLng>();
             toBeAdded.add(tmp.get(0));
             for(int i = 0; i < steps.size(); i++) {
 //                float startLat = steps.get(i).start_location.lat;
@@ -341,6 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 List<LatLng> polyLineLatLng = decode(steps.get(i).polyline.points);
                 double totalDistance = 0;
+                positions.addAll(polyLineLatLng);
                 int totalTime = steps.get(i).duration.value;
                 for(int j = 1; j < polyLineLatLng.size(); j++) {
                    totalDistance += latLongDistance(polyLineLatLng.get(j - 1), polyLineLatLng.get(j));
@@ -362,6 +380,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 //com.google.android.gms.maps.model.Polyline polyline = mMap.addPolyline(new PolylineOptions().clickable(false).addAll(polyLineLatLng));
             }
+            updateMapView(positions);
+
         }
     }
 
