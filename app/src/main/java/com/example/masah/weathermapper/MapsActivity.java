@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.ArrayList;
 
 import static com.google.maps.android.PolyUtil.decode;
 
@@ -280,6 +282,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //parserTask.execute(result);
             List<Step> steps = path.routes.get(0).legs.get(0).steps;
             System.out.println(steps.size());
+            int timeCovered = 0;
+            List<LatLng> toBeAdded = new ArrayList<LatLng>();
+            List<LatLng> tmp = decode(steps.get(0).polyline.points);
+            toBeAdded.add(tmp.get(0));
+            int start = 0;
             for(int i = 0; i < steps.size(); i++) {
 //                float startLat = steps.get(i).start_location.lat;
 //                float startlong = steps.get(i).start_location.lng;
@@ -288,11 +295,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                float endlong = steps.get(i).end_location.lng;
 
                 List<LatLng> polyLineLatLng = decode(steps.get(i).polyline.points);
+                double totalDistance = 0;
+                int totalTime = steps.get(i).duration.value;
+                for(int j = 1; j < polyLineLatLng.size(); j++) {
+                   totalDistance += latLongDistance(polyLineLatLng.get(j - 1), polyLineLatLng.get(j));
+                }
+                for(int j = 1; j < polyLineLatLng.size(); j++) {
+                    toBeAdded.add(polyLineLatLng.get(j));
+                    double currDist = latLongDistance(polyLineLatLng.get(j - 1), polyLineLatLng.get(j));
+                    double currTime = currDist / totalDistance * totalTime;
+                    timeCovered += currTime;
+                    if(timeCovered >= 3600) {
+                        timeCovered = 0;
+                        com.google.android.gms.maps.model.Polyline addPart = mMap.addPolyline(new PolylineOptions().addAll(toBeAdded).color(Color.RED));
+                        start += (1 << 20);
+                        System.out.println("got Time break");
+                        toBeAdded.clear();
+                        toBeAdded.add(polyLineLatLng.get(j));
+                    }
+                }
+                System.out.println(polyLineLatLng.size());
 
-                com.google.android.gms.maps.model.Polyline polyline = mMap.addPolyline(new PolylineOptions().clickable(false).addAll(polyLineLatLng));
+                //com.google.android.gms.maps.model.Polyline polyline = mMap.addPolyline(new PolylineOptions().clickable(false).addAll(polyLineLatLng));
             }
         }
     }
 
+    private double latLongDistance(LatLng source, LatLng destination) {
+        double sourceLat = (source.latitude) / 180.0 * Math.PI;
+        double sourceLng = (source.longitude) / 180.0 * Math.PI;
+        double destinationLat = (destination.latitude) / 180.0 * Math.PI;
+        double destinationLng = (destination.longitude) / 180.0 * Math.PI;
+        double diffLat = (destinationLat - sourceLat) / 2.0;
+        double diffLng = (destinationLng - sourceLng) / 2.0;
+        double a = Math.sin(diffLat) * Math.sin(diffLat) + Math.cos(sourceLat) * Math.cos(destinationLat) * Math.sin(diffLng) * Math.sin(diffLng);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return c;
+
+    }
 
 }
