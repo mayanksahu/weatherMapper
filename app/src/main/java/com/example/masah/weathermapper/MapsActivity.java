@@ -22,6 +22,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
 import java.io.Console;
@@ -30,6 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -264,6 +267,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             System.out.println(result);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Path path = gson.fromJson(result, Path.class);
+            //System.out.println(path.routes.get(0).legs.get(0).steps.get(0).start_location.lat);
 
             //ParserTask parserTask = new ParserTask();
 
