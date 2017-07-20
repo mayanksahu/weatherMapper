@@ -21,7 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,6 +32,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+
+import static com.google.maps.android.PolyUtil.decode;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -275,6 +278,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             // Invokes the thread for parsing the JSON data
             //parserTask.execute(result);
+            List<Step> steps = path.routes.get(0).legs.get(0).steps;
+            System.out.println(steps.size());
+            for(int i = 0; i < steps.size(); i++) {
+//                float startLat = steps.get(i).start_location.lat;
+//                float startlong = steps.get(i).start_location.lng;
+//
+//                float endLat = steps.get(i).end_location.lat;
+//                float endlong = steps.get(i).end_location.lng;
+
+                List<LatLng> polyLineLatLng = decode(steps.get(i).polyline.points);
+
+                com.google.android.gms.maps.model.Polyline polyline = mMap.addPolyline(new PolylineOptions().clickable(false).addAll(polyLineLatLng));
+            }
         }
     }
 
