@@ -286,7 +286,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             List<LatLng> toBeAdded = new ArrayList<LatLng>();
             List<LatLng> tmp = decode(steps.get(0).polyline.points);
             toBeAdded.add(tmp.get(0));
-            int start = 0;
             for(int i = 0; i < steps.size(); i++) {
 //                float startLat = steps.get(i).start_location.lat;
 //                float startlong = steps.get(i).start_location.lng;
@@ -305,10 +304,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     double currDist = latLongDistance(polyLineLatLng.get(j - 1), polyLineLatLng.get(j));
                     double currTime = currDist / totalDistance * totalTime;
                     timeCovered += currTime;
-                    if(timeCovered >= 3600) {
+                    if(timeCovered >= 3600 || (j == polyLineLatLng.size() - 1 && i == steps.size() - 1)) {
                         timeCovered = 0;
                         com.google.android.gms.maps.model.Polyline addPart = mMap.addPolyline(new PolylineOptions().addAll(toBeAdded).color(Color.RED));
-                        start += (1 << 20);
                         System.out.println("got Time break");
                         toBeAdded.clear();
                         toBeAdded.add(polyLineLatLng.get(j));
