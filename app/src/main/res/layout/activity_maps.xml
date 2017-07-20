@@ -5,10 +5,10 @@
 
 
     <EditText
-        android:id="@+id/sources"
+        android:id="@+id/source"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="sources" />
+        android:hint="source" />
 
     <EditText
         android:id="@+id/destination"
@@ -20,6 +20,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/search"
         android:text="search" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

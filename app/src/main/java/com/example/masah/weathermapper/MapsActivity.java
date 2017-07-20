@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +27,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 644;
+    private EditText sourceBar;
+    private EditText destinationBar;
+    private Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        sourceBar = (EditText) findViewById(R.id.source);
+        destinationBar = (EditText) findViewById(R.id.destination);
+        searchButton = (Button) findViewById(R.id.search);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String source = sourceBar.getText().toString();
+                String destination = destinationBar.getText().toString();
+                if(!source.isEmpty() && !destination.isEmpty()) {
+                    source = source.replace(' ','+');
+                    destination = destination.replace(' ','+');
+
+                    // Directions and weather code
+                }
+            }
+        });
     }
 
     @Override
