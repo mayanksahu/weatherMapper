@@ -18,6 +18,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -45,6 +49,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 644;
     private EditText sourceBar;
     private EditText destinationBar;
+    private String source;
+    private String destination;
     private Button searchButton;
 
     private static final String DIRECTION_API_KEY = "AIzaSyCCTo0wejIJxBM-tONImmp7hoL6X0iTyTA";
@@ -86,14 +92,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        sourceBar = (EditText) findViewById(R.id.source);
-        destinationBar = (EditText) findViewById(R.id.destination);
+
+//        sourceBar = (EditText) findViewById(R.id.source);
+//        destinationBar = (EditText) findViewById(R.id.destination);
         searchButton = (Button) findViewById(R.id.search);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String source = sourceBar.getText().toString();
-                String destination = destinationBar.getText().toString();
+//                String source = sourcecompleteFragment.getName().toString();
+//                String destination = destinationBar.getText().toString();
+                System.out.println(source + " " + destination);
                 if(!source.isEmpty() && !destination.isEmpty()) {
                     source = source.replace(' ','+');
                     destination = destination.replace(' ','+');
@@ -108,6 +116,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     // Directions and weather code
                 }
+            }
+        });
+
+        final PlaceAutocompleteFragment sourceCompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.source);
+
+        sourceCompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i("INFO", "Place: " + place.getName());
+                source = place.getAddress().toString();
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i("INFO", "An error occurred: " + status);
+            }
+        });
+
+        final PlaceAutocompleteFragment destinationCompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.destination);
+
+        destinationCompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i("INFO", "Place: " + place.getName());
+                destination = place.getAddress().toString();
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i("INFO", "An error occurred: " + status);
             }
         });
     }
@@ -197,6 +241,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        System.out.println(url);
 
         return url;
     }
@@ -331,5 +377,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return c;
 
     }
+
 
 }
