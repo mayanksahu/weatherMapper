@@ -53,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String source;
     private String destination;
     private Button searchButton;
-
+    private int padding = 150; // offset from edges of the map in pixels
     private static final String DIRECTION_API_KEY = "AIzaSyCCTo0wejIJxBM-tONImmp7hoL6X0iTyTA";
 
     @Override
@@ -232,7 +232,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLngBounds bounds = builder.build();
 
-        int padding = 25; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
 
         mMap.animateCamera(cu);
@@ -332,6 +331,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // doInBackground()
         @Override
         protected void onPostExecute(String result) {
+            mMap.clear();
             super.onPostExecute(result);
             System.out.println(result);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
