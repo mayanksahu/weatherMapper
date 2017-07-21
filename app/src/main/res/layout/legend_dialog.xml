@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Day"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#E0EF0F"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Night"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rain"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#0000FF"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Snow"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#66FFFF"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sleet"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#FF0000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wind"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#971F8F"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fog"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#660000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cloudy"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#888888"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Partly Cloudy Day"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#cccccc"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Partly Cloudy Night"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#444444"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Day"
+        android:textSize="18dp"
+        android:textAlignment="center"
+        android:textColor="#00FF00"/>
+</LinearLayout>

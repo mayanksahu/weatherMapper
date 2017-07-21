@@ -3,6 +3,9 @@ package com.example.masah.weathermapper;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -12,6 +15,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -57,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String sourceTitle = "My Location";
     private String destinationTitle;
     private Button searchButton;
+    private Button legendButton;
     private int padding = 150;
 //    private int currentStretchColour;
     private Weather currentWeather;
@@ -96,6 +101,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        final Context context = getApplicationContext();
+
+        legendButton = (Button) findViewById(R.id.legend);
+        legendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment legendDialog = new LegendDialogFragment();
+                legendDialog.show(getSupportFragmentManager(), "Legend");
+            }
+        });
 
         searchButton = (Button) findViewById(R.id.search);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -405,7 +421,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         switch(colourItem) {
                             case "clear-day":
-                                colour = Color.parseColor("#FFFF33");
+                                colour = Color.parseColor("#E0EF0F");
                                 break;
                             case "clear-night":
                                 colour = Color.BLACK;
@@ -420,7 +436,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 colour = Color.RED;
                                 break;
                             case "wind":
-                                colour = Color.parseColor("#330000");
+                                colour = Color.parseColor("#971F8F");
                                 break;
                             case "fog":
                                 colour = Color.parseColor("#660000");
@@ -512,6 +528,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return c;
 
     }
-
 
 }
