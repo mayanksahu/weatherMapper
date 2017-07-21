@@ -57,10 +57,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private EditText sourceBar;
     private EditText destinationBar;
     private String source = "My Location";
-    private String destination;
+    private String destination = "";
     private String sourceTitle = "My Location";
     private String destinationTitle;
     private Button searchButton;
+    private Button legendButton;
     private int padding = 150;
 //    private int currentStretchColour;
     private Weather currentWeather;
@@ -423,6 +424,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             updateMapView(positions);
             mMap.addMarker(new MarkerOptions().position(startLocation).title(sourceTitle).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             mMap.addMarker(new MarkerOptions().position(endLocation).title(destinationTitle).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            source="My Location";
+            destination = "";
         }
     }
 
@@ -481,7 +484,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             switch(colourItem) {
                 case "clear-day":
-                    colour = Color.parseColor("#FFFF33");
+                    colour = Color.parseColor("#E0EF0F");
                     break;
                 case "clear-night":
                     colour = Color.BLACK;
@@ -496,7 +499,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     colour = Color.RED;
                     break;
                 case "wind":
-                    colour = Color.parseColor("#330000");
+                    colour = Color.parseColor("#971F8F");
                     break;
                 case "fog":
                     colour = Color.parseColor("#660000");
