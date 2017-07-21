@@ -3,20 +3,22 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Powered By Dark Sky"/>
 
     <fragment
         android:id="@+id/source"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name= "com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:text="source" />
+        android:name= "com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
 
     <fragment
         android:id="@+id/destination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name= "com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:hint="destination" />
+        android:name= "com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
 
 
     <Button
@@ -38,5 +40,6 @@
 
 
     </fragment>
+
 
 </LinearLayout>

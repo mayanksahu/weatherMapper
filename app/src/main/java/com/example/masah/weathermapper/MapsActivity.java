@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -40,6 +42,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.google.maps.android.PolyUtil.decode;
 
@@ -49,8 +52,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 644;
     private EditText sourceBar;
     private EditText destinationBar;
-    private String source;
+    private String source = "My Location";
     private String destination;
+    private String sourceTitle = "My Location";
+    private String destinationTitle;
     private Button searchButton;
     private int padding = 150;
 //    private int currentStretchColour;
@@ -97,7 +102,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 if(!source.isEmpty() && !destination.isEmpty()) {
-                    source = source.replace(' ','+');
+                    if(source.equals("My Location")) {
+                        LocationManager lm = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+                        try {
+                            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            source = Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude());
+                        } catch (SecurityException s) {
+                            Log.d("Error", "Location needed");
+                            System.exit(0);
+                        }
+                    } else {
+                        source = source.replace(' ', '+');
+                    }
                     destination = destination.replace(' ','+');
                     String directionsUrl = getDirectionsUrl(source, destination);
 
@@ -113,6 +129,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         final PlaceAutocompleteFragment sourceCompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.source);
+        sourceCompleteFragment.setText("My Location");
 
         sourceCompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -120,6 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // TODO: Get info about the selected place.
                 Log.i("INFO", "Place: " + place.getName());
                 source = place.getAddress().toString();
+                sourceTitle = place.getName().toString();
             }
 
             @Override
@@ -131,6 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         final PlaceAutocompleteFragment destinationCompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.destination);
+        destinationCompleteFragment.setHint("Destination");
 
         destinationCompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -138,6 +157,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // TODO: Get info about the selected place.
                 Log.i("INFO", "Place: " + place.getName());
                 destination = place.getAddress().toString();
+                destinationTitle = place.getName().toString();
             }
 
             @Override
@@ -336,6 +356,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Invokes the thread for parsing the JSON data
             List<Step> steps = path.routes.get(0).legs.get(0).steps;
             int timeCovered = 0;
+            LatLng startLocation = new LatLng(steps.get(0).start_location.lat, steps.get(0).start_location.lng);
+            LatLng endLocation = new LatLng(steps.get(steps.size()-1).end_location.lat, steps.get(steps.size()-1).end_location.lng);
             long totalTimeCovered = System.currentTimeMillis() / 1000;
             List<LatLng> toBeAdded = new ArrayList<LatLng>();
             List<LatLng> tmp = decode(steps.get(0).polyline.points);
@@ -422,6 +444,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
             updateMapView(positions);
+            mMap.addMarker(new MarkerOptions().position(startLocation).title(sourceTitle));
+            mMap.addMarker(new MarkerOptions().position(endLocation).title(destinationTitle));
         }
     }
 
