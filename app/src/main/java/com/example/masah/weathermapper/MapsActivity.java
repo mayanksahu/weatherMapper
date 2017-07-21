@@ -354,6 +354,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Path path = gson.fromJson(result, Path.class);
 
             // Invokes the thread for parsing the JSON data
+            if(path.routes.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Source and destination need to be connected by road", Toast.LENGTH_LONG).show();
+                return;
+            }
             List<Step> steps = path.routes.get(0).legs.get(0).steps;
             int timeCovered = 0;
             LatLng startLocation = new LatLng(steps.get(0).start_location.lat, steps.get(0).start_location.lng);
@@ -444,8 +448,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
             updateMapView(positions);
-            mMap.addMarker(new MarkerOptions().position(startLocation).title(sourceTitle));
-            mMap.addMarker(new MarkerOptions().position(endLocation).title(destinationTitle));
+            mMap.addMarker(new MarkerOptions().position(startLocation).title(sourceTitle).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+            mMap.addMarker(new MarkerOptions().position(endLocation).title(destinationTitle).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         }
     }
 
