@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name= "com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:hint="source" />
+        android:text="source" />
 
     <fragment
         android:id="@+id/destination"
