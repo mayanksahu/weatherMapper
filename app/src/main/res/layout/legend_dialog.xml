@@ -9,7 +9,7 @@
         android:text="Clear Day"
         android:textSize="18dp"
         android:textAlignment="center"
-        android:textColor="#E0EF0F"/>
+        android:textColor="#F3F31E"/>
 
     <TextView
         android:layout_width="match_parent"

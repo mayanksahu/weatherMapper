@@ -484,7 +484,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             switch(colourItem) {
                 case "clear-day":
-                    colour = Color.parseColor("#E0EF0F");
+                    colour = Color.parseColor("#F3F31E");
                     break;
                 case "clear-night":
                     colour = Color.BLACK;
