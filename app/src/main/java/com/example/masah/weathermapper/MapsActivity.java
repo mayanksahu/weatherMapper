@@ -391,56 +391,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         String weatherURL = getWeatherURL(new LatLng(midLat, midLng));
                         WeatherDownloadTask weatherDownload = new WeatherDownloadTask();
-
-                        try{
-                            String res = weatherDownload.execute(weatherURL).get();}
-                        catch(Exception e){
-                           System.out.println(e.toString());
+                        weatherDownload.hourCount = hourCount;
+                        weatherDownload.toBeAdded = new ArrayList<LatLng>();
+                        for(int k = 0 ; k < toBeAdded.size() ; k++){
+                            weatherDownload.toBeAdded.add(toBeAdded.get(k));
                         }
+
+//                        try{
+//                            String res = weatherDownload.execute(weatherURL).get();}
+//                        catch(Exception e){
+//                           System.out.println(e.toString());
+//                        }
 //                        getWeatherResponse(weatherURL);
-                        String colourItem = currentWeather.hourly.data.get(hourCount).icon;
+                        weatherDownload.execute(weatherURL);
                         hourCount++;
-
-                        int colour=0;
-
-                        switch(colourItem) {
-                            case "clear-day":
-                                colour = Color.parseColor("#FFFF33");
-                                break;
-                            case "clear-night":
-                                colour = Color.BLACK;
-                                break;
-                            case "rain":
-                                colour = Color.BLUE;
-                                break;
-                            case "snow":
-                                colour = Color.parseColor("#66FFFF");
-                                break;
-                            case "sleet":
-                                colour = Color.RED;
-                                break;
-                            case "wind":
-                                colour = Color.parseColor("#330000");
-                                break;
-                            case "fog":
-                                colour = Color.parseColor("#660000");
-                                break;
-                            case "cloudy":
-                                colour = Color.GRAY;
-                                break;
-                            case "partly-cloudy-day":
-                                colour = Color.LTGRAY;
-                                break;
-                            case "partly-cloudy-night":
-                                colour = Color.DKGRAY;
-                                break;
-                            default:
-                                colour = Color.GREEN;
-                                break;
-                        }
-
-
-                        com.google.android.gms.maps.model.Polyline addPart = mMap.addPolyline(new PolylineOptions().addAll(toBeAdded).color(colour));
                         toBeAdded.clear();
                         toBeAdded.add(polyLineLatLng.get(j));
 
@@ -472,7 +436,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private class WeatherDownloadTask extends AsyncTask<String, Void, String> {
-
+        private List<LatLng> toBeAdded;
+        private int hourCount;
         // Downloading data in non-ui thread
         @Override
         protected String doInBackground(String... url) {
@@ -487,8 +452,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            currentWeather = gson.fromJson(data, Weather.class);
+
             return data;
         }
 
@@ -497,6 +461,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            currentWeather = gson.fromJson(result, Weather.class);
+            String colourItem = currentWeather.hourly.data.get(hourCount).icon;
+            System.out.println(hourCount);
+            System.out.println(colourItem);
+
+
+            int colour=0;
+
+            switch(colourItem) {
+                case "clear-day":
+                    colour = Color.parseColor("#FFFF33");
+                    break;
+                case "clear-night":
+                    colour = Color.BLACK;
+                    break;
+                case "rain":
+                    colour = Color.BLUE;
+                    break;
+                case "snow":
+                    colour = Color.parseColor("#66FFFF");
+                    break;
+                case "sleet":
+                    colour = Color.RED;
+                    break;
+                case "wind":
+                    colour = Color.parseColor("#330000");
+                    break;
+                case "fog":
+                    colour = Color.parseColor("#660000");
+                    break;
+                case "cloudy":
+                    colour = Color.GRAY;
+                    break;
+                case "partly-cloudy-day":
+                    colour = Color.LTGRAY;
+                    break;
+                case "partly-cloudy-night":
+                    colour = Color.DKGRAY;
+                    break;
+                default:
+                    colour = Color.GREEN;
+                    break;
+            }
+
+
+            com.google.android.gms.maps.model.Polyline addPart = mMap.addPolyline(new PolylineOptions().addAll(toBeAdded).color(colour));
         }
     }
 
